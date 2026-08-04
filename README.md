@@ -1,1 +1,2 @@
-# GOLDx
+#### GOLDx
+> Coming soon!
