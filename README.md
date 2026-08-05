@@ -6,7 +6,7 @@
 
 [![Status](https://img.shields.io/badge/Status-Coming%20Soon-gold?style=for-the-badge)](#)
 [![Java](https://img.shields.io/badge/Java-21%2B-orange?style=for-the-badge&logo=openjdk)](#)
-[![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue?style=for-the-badge)](License.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey?style=for-the-badge&logo=windows)](#)
 
 # GOLDx
