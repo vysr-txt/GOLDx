@@ -106,6 +106,8 @@ Before contributing:
 - Explain your changes clearly
 - Follow the project's coding style
 
+![contributors badge](https://readme-contribs.as93.net/contributors/vysr-txt/GOLDx)
+
 ---
 
 ## 📜 License
