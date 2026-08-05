@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="https://i.imgur.com/Ar0zvuT.png" alt="Project Banner" width="75%"/>
+  <img src="https://i.imgur.com/w1PkO59.gif" alt="Project Banner" width="75%"/>
   
-### **GOLDX** • *Blazing fast Java Discord Webhook & IP Geolocation Tool*
+### **GOLDx** • *Blazing fast Java Multitool*
   [Explore Documentation](https://www.google.com/search?q=%23) · [Report Bug](https://www.google.com/search?q=https://github.com/yourusername/your-repo/issues) · [Request Feature](https://www.google.com/search?q=https://github.com/yourusername/your-repo/issues)
 
 
