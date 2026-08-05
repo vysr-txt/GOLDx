@@ -1,3 +1,5 @@
+<a id="readme-top"></a>
+
 <div align="center">
 
 <img src="https://i.imgur.com/w1PkO59.gif" alt="GOLDx Banner" width="100%"/>
@@ -9,31 +11,48 @@
 [![License](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue?style=for-the-badge)](License.md)
 [![Platform](https://img.shields.io/badge/Platform-Windows-lightgrey?style=for-the-badge&logo=windows)](#)
 
-# GOLDx
+<br>
 
-### ⚡ Blazing Fast Java Multitool
+### Blazing Fast Java Multitool
 
 A modern, lightweight, and performance-focused multitool built with Java.
 
-**Fast. Clean. Powerful.**
+**Fast, clean and powerful!**
 
-[Report Bug](https://github.com/vysr-txt/GOLDx/issues)
-&nbsp;•&nbsp;
-[Request Feature](https://github.com/vysr-txt/GOLDx/issues)
+[![Report Bug](https://img.shields.io/badge/Report-Bug-red?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vysr-txt/GOLDx/issues)
+[![Request Feature](https://img.shields.io/badge/Request-Feature-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vysr-txt/GOLDx/issues)
 
 </div>
 
 ---
 
-## 🚀 Overview
+<details>
+<summary><strong>📑 Table of Contents</strong></summary>
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Preview](#-preview)
+- [Installation](#-installation)
+- [Documentation](#-documentation)
+- [Development](#-development)
+- [Contributing](#-contributing)
+- [License](#-license)
+
+</details>
+
+---
+
+## 📖 Overview
 
 **GOLDx** is a next-generation Java multitool designed around three core principles:
 
-- ⚡ **Speed** — optimized performance with minimal overhead
-- 🎨 **Simplicity** — a clean and intuitive experience
-- 🛠️ **Utility** — powerful tools packed into one application
+- 🚀 **Speed** — optimized performance with minimal overhead
+- 🎯 **Simplicity** — a clean and intuitive experience
+- 🧩 **Utility** — powerful tools packed into one application
 
 Built from the ground up with a focus on reliability, efficiency, and a polished user experience.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
@@ -60,11 +79,15 @@ Built from the ground up with a focus on reliability, efficiency, and a polished
 
 > More features will be revealed with upcoming releases.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 
 ## 📸 Preview
 
-Coming soon.
+> Screenshots and demos will be added here once the first build is ready.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
@@ -78,39 +101,50 @@ No public release available yet.
 
 Installation instructions will be provided when the first version releases.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 
 ## 📚 Documentation
 
 Documentation, guides, and usage examples will become available after release.
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 
-## 🛠️ Development
+## 🔧 Development
 
 Want to follow the progress?
 
-⭐ Star the repository to stay updated.
+- ⭐ **Star** the repository to stay updated
+- 🐛 [Open an issue](https://github.com/vysr-txt/GOLDx/issues) — issues and feature requests help shape the future of GOLDx
 
-Issues and feature requests help shape the future of GOLDx.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
 ## 🤝 Contributing
 
+[![Contributions Welcome](https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=for-the-badge)](https://github.com/vysr-txt/GOLDx/issues)
+
 Contributions, ideas, and feedback are welcome.
 
 Before contributing:
 
-- Check existing issues
-- Explain your changes clearly
-- Follow the project's coding style
+1. Check [existing issues](https://github.com/vysr-txt/GOLDx/issues) to avoid duplicates
+2. Explain your changes clearly
+3. Follow the project's coding style
+
+### Contributors
 
 ![contributors badge](https://readme-contribs.as93.net/contributors/vysr-txt/GOLDx)
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ---
 
-## 📜 License
+## 📄 License
 
 GOLDx is licensed under the **PolyForm Noncommercial License 1.0.0**.
 
@@ -120,9 +154,9 @@ This means:
 - ✅ Modification and redistribution are allowed under the license terms
 - ❌ Commercial use requires separate permission
 
-For commercial licensing:
+For commercial licensing, reach out on Discord: **`@.vysr`**
 
-**Discord:** `@.vysr`
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ---
 
@@ -140,8 +174,10 @@ Made with ❤️ by **.vysr**
 
 <br>
 
-<sub>
-© 2026 .vysr — All rights reserved under the PolyForm Noncommercial License 1.0.0
-</sub>
+<sub>© 2026 .vysr — All rights reserved under the PolyForm Noncommercial License 1.0.0</sub>
+
+<br><br>
+
+<a href="#readme-top">⬆ Back to top</a>
 
 </div>
