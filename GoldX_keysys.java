@@ -94,23 +94,4 @@ public class GoldX_keysys {
         byte[] signatureBytes = Base64.getDecoder().decode(signatureBase64);
         return sig.verify(signatureBytes);
     }
-
-    public static void main(String[] args) {
-        String keyToVerify;
-
-        // Nutze das übergebene Argument aus install.ps1, falls vorhanden
-        if (args.length > 0 && !args[0].isEmpty()) {
-            keyToVerify = args[0];
-        } else {
-            // Fallback für Tests direkt in der IDE
-            keyToVerify = "eyJ1c2VyIjoie3VzZXIudXNlcm5hbWV9IiwidHMiOjE3ODYwNDI2ODksInNpZyI6IkNsY1c4VE1qb01TbnhJbDV5MjRRTEtTMW1mNnJac2o1YzZjTkdld2dBMXVvVTdHaDlhZmFIWHE0QkUvNW53TDBvZ29kbkUzVzJrdHJrUjN0V2dvSW5lZmZPbm9aM2RXMlR2Wkh5WkpobVFYdE9FSmVhVnUweUhYTlR4ZjZRQzgzNTJlSzFrcGhVV3FjN2JLY3lJNW5XYkM5b1dOazJMQ0hkUCtNYS9yVUdVd3R4TTk0czdHcnZ2ejVURGxsbzlVUi9Fc2VHM29GMTYxUWJPTnI0MUZ1b05hZkc4ZlNjTDExeWVwNFl1NzVtVlZFR3dlWkNQeUtrUUdzNnpIV1ZPS2gwNjFnd2dHMlplRzdZZGlvRVlzZ2xDbkNoT3o5ZzBPSFRFWjB3Q2x2SUxya2NIcXdiQnJGVXQ0RS8zUVppa0V2c0ZPWDNFVVFjN2lzQkh1czV0NmZtQT09In0=";
-        }
-
-        boolean isValid = verifyLicense(keyToVerify);
-        if (isValid) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
-    }
 }
