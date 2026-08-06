@@ -64,7 +64,6 @@ if ([string]::IsNullOrWhiteSpace($UserKey)) {
 Write-Host ""
 Write-Host "$GREY(*) Preparing key verification module...$RESET"
 
-# Prüfen & automatisches Herunterladen von GoldX_keysys.java
 if (-not (Test-Path "GoldX_keysys.java") -and -not (Test-Path "keysys\GoldX_keysys.java")) {
     Write-Host "$GREY(*) Downloading verification module from GitHub...$RESET"
     try {
@@ -76,11 +75,9 @@ if (-not (Test-Path "GoldX_keysys.java") -and -not (Test-Path "keysys\GoldX_keys
     }
 }
 
-# Alte Kompilate löschen
 if (Test-Path "GoldX_keysys.class") { Remove-Item "GoldX_keysys.class" -Force }
 if (Test-Path "keysys\GoldX_keysys.class") { Remove-Item "keysys\GoldX_keysys.class" -Force }
 
-# Neu kompilieren
 if (Test-Path "GoldX_keysys.java") {
     Write-Host "$GREY(*) Compiling GoldX_keysys.java...$RESET"
     javac -encoding UTF-8 -d . GoldX_keysys.java
