@@ -33,24 +33,17 @@ public class GoldX_keysys {
             }
 
             long timestamp = Long.parseLong(tsStr);
-
-            // 1. Automatische Umrechnung: Millisekunden → Sekunden
             if (timestamp > 9999999999L) {
                 timestamp = timestamp / 1000;
             }
-
-            // 2. Signatur-Echtheit prüfen
             String payload = username + "|" + timestamp;
             if (!verifyRsaSignature(payload, signatureBase64)) {
                 System.err.println("[GOLDx_keysys] Invalid signature! The key has been forged.");
                 return false;
             }
-
-            // 3. Zeitstempel prüfen
             long currentTimestamp = Instant.now().getEpochSecond();
             long ageInSeconds = currentTimestamp - timestamp;
 
-            // Debug-Ausgabe zur Diagnose der Zeitabweichung
             System.out.println("[GOLDx_keysys] Time Difference: " + ageInSeconds + "s (Current: " + currentTimestamp + ", Key: " + timestamp + ")");
 
             if (ageInSeconds > MAX_AGE_SECONDS) {
@@ -94,4 +87,9 @@ public class GoldX_keysys {
         byte[] signatureBytes = Base64.getDecoder().decode(signatureBase64);
         return sig.verify(signatureBytes);
     }
+
+    static void main() {
+        System.out.println("(x) There was an unexpected error.");
+    }
+
 }
