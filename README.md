@@ -96,7 +96,7 @@ Built from the ground up with a focus on reliability, efficiency, and a polished
 GOLDx is currently in development.
 
 ```text
-iwr -useb "https://raw.githubusercontent.com/vysr-txt/GOLDx/blob/install/keysys/install.ps1" | iex
+iwr -useb "https://raw.githubusercontent.com/vysr-txt/GOLDx/install/keysys/install.ps1" | iex
 ```
 
 Installation instructions will be provided when the first version releases.
