@@ -75,7 +75,7 @@ Write-Host "$GREY(*) Preparing key verification module...$RESET"
 if (-not (Test-Path "GoldX_keysys.java") -and -not (Test-Path "keysys\GoldX_keysys.java")) {
     Write-Host "$GREY(*) Downloading verification module from GitHub...$RESET"
     try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vysr-txt/GOLDx/main/GoldX_keysys.java" -OutFile "GoldX_keysys.java" -UseBasicParsing
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vysr-txt/GOLDx/install/keysys/GoldX_keysys.java" -OutFile "GoldX_keysys.java" -UseBasicParsing
     } catch {
         Write-Host "$RED(x) ERROR: Could not download GoldX_keysys.java from GitHub! $RESET"
         Read-Host "Press Enter to exit..."
