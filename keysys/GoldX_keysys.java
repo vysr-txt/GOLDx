@@ -1,172 +1,95 @@
-$Host.UI.RawUI.WindowTitle = "GOLDx Installer"
+package keysys;
 
-[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+import java.nio.charset.StandardCharsets;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-$e = [char]27
-$RESET     = "$e[0m"
-$YELLOW    = "$e[33m"
-$GREY      = "$e[90m"
-$RED       = "$e[31m"
-$GREEN     = "$e[32m"
-$BG_YELLOW = "$e[43m$e[30m"
+public class GoldX_keysys {
 
-$B = [char]0x2588
-$D = [char]0x2584
-$U = [char]0x2580
-$M = [char]0x2592
-$L = [char]0x2591
+    private static final String PUBLIC_KEY_BASE64 =
+            "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArVbH3DetnwAMJkK8UwPhy9XqBhJqZMUwrfgqNbBAeguF4/X+xs0CR4bPnUYHve+9NLfSmFLBXGcd6DIclrp8p/jaRpkrpObYC9dFb2ma0RA3LpzuH4iIlRbFNeD9rGDRgiEF1HNK/qG2Sqy+gVoLmZlGqDnoqqxkAnncI4xOl34/GIu38Xvcs/TsguoYI19JaBRmtOeVlhUbi275dRa8SJxSo4rwNkDpNUXDDK63INHLKXPCu65CHQzdijnZaC/+ymkCKHboF5BosMDqTiXRJi2KWRDm9T8fdJ06niqEvhxfIVtlq7wR0F63vNzgi97zMGtCoeNI5GUZjh6aDJc3awIDAQAB";
 
-function Show-Header {
-    Clear-Host
-    Write-Host "$YELLOW"
-    Write-Host "                                    $D$B$B$B$B$B$B$D   $D$B$B$B$B$B$B$D   $D$B        $B$B$B$B$B$B$B$B$D    $M$B$B    $B$B$M"
-    Write-Host "                                   $B$B$B    $B$B$B $B$B$B    $B$B$B $B$B$B        $B$B$B   $U$B$B$B   $M$M $B $B $M$L"
-    Write-Host "                                   $B$B$B    $B$U  $B$B$B    $B$B$B $B$B$B        $B$B$B    $B$B$B   $L$L  $B   $L"
-    Write-Host "                                  $D$B$B$B        $B$B$B    $B$B$B $B$B$B        $B$B$B    $B$B$B    $L $B $B $M"
-    Write-Host "                                 $U$U$B$B$B $B$B$B$B$D  $B$B$B    $B$B$B $B$B$B        $B$B$B    $B$B$B   $M$B$B$M $M$B$B$M"
-    Write-Host "                                   $B$B$B    $B$B$B $B$B$B    $B$B$B $B$B$B        $B$B$B    $B$B$B    $M$M $L $L$M $L"
-    Write-Host "                                   $B$B$B    $B$B$B $B$B$B    $B$B$B $B$B$B$D    $D  $B$B$B   $D$B$B$B    $L$L   $L$M $L"
-    Write-Host "                                   $B$B$B$B$B$B$B$U   $U$B$B$B$B$B$B$U  $B$B$B$B$B$D$D$B$B  $B$B$B$B$B$B$B$U     $L    $L"
-    Write-Host "$RESET"
-    Write-Host "------------------------------------------------------------------------------------------------------------------------"
-    Write-Host "$BG_YELLOW GOLDx Installer $RESET $GREY v1.0 $RESET"
-    Write-Host "------------------------------------------------------------------------------------------------------------------------"
-    Write-Host ""
-}
+    // Maximale Gültigkeit / Toleranz auf 15 Minuten (900s) erhöht
+    private static final long MAX_AGE_SECONDS = 900;
 
-function Cleanup-KeySystem {
-    Write-Host "$GREY(*) Cleaning up temporary key verification files...$RESET"
+    public static boolean verifyLicense(String rawLicenseKey) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(rawLicenseKey.trim());
+            String jsonString = new String(decodedBytes, StandardCharsets.UTF_8);
 
-    if (Test-Path "GoldX_keysys.java") { Remove-Item "GoldX_keysys.java" -Force -ErrorAction SilentlyContinue }
-    if (Test-Path "GoldX_keysys.class") { Remove-Item "GoldX_keysys.class" -Force -ErrorAction SilentlyContinue }
-    if (Test-Path "keysys") { Remove-Item "keysys" -Recurse -Force -ErrorAction SilentlyContinue }
-}
+            String username = extractJsonValue(jsonString, "user");
+            String tsStr = extractJsonValue(jsonString, "ts");
+            String signatureBase64 = extractJsonValue(jsonString, "sig");
 
-Show-Header
+            if (username == null || tsStr == null || signatureBase64 == null) {
+                System.err.println("[GOLDx_keysys] Invalid JSON format.");
+                return false;
+            }
 
-Write-Host "$GREY(*) Checking Java environment...$RESET"
-$javaCheck = Get-Command java -ErrorAction SilentlyContinue
-if (-not $javaCheck) {
-    Write-Host ""
-    Write-Host "$RED(x) ERROR: Java is not installed or not added to PATH! $RESET"
-    Write-Host "$GREY(!) Please install Java JDK 17+ to verify and install GOLDx. $RESET"
-    Write-Host ""
-    Read-Host "Press Enter to exit..."
-    exit 1
-}
+            long timestamp = Long.parseLong(tsStr);
+            if (timestamp > 9999999999L) {
+                timestamp = timestamp / 1000;
+            }
+            String payload = username + "|" + timestamp;
+            if (!verifyRsaSignature(payload, signatureBase64)) {
+                System.err.println("[GOLDx_keysys] Invalid signature! The key has been forged.");
+                return false;
+            }
+            long currentTimestamp = Instant.now().getEpochSecond();
+            long ageInSeconds = currentTimestamp - timestamp;
 
-Write-Host "$GREEN(v) Java detected!$RESET"
-Write-Host ""
+            System.out.println("[GOLDx_keysys] Time Difference: " + ageInSeconds + "s (Current: " + currentTimestamp + ", Key: " + timestamp + ")");
 
-Write-Host "$YELLOW(>) Enter your 5-minute verification key from Discord (dc.gg/GOLDx): $RESET" -NoNewline
-$UserKey = Read-Host
+            if (ageInSeconds > MAX_AGE_SECONDS) {
+                System.err.println("[GOLDx_keysys] Key has expired (" + ageInSeconds + "s old).");
+                return false;
+            }
 
-if ([string]::IsNullOrWhiteSpace($UserKey)) {
-    Write-Host ""
-    Write-Host "$RED(x) ERROR: No key provided! Installation aborted. $RESET"
-    Write-Host ""
-    Read-Host "Press Enter to exit..."
-    exit 1
-}
+            if (ageInSeconds < -300) {
+                System.err.println("[GOLDx_keysys] Time desynchronization: PC system clock is too far behind (" + ageInSeconds + "s).");
+                return false;
+            }
 
-Write-Host ""
-Write-Host "$GREY(*) Preparing key verification module...$RESET"
+            System.out.println("[GOLDx_keysys] Your key is valid! Welcome, " + username + "!");
+            return true;
 
-if (-not (Test-Path "GoldX_keysys.java") -and -not (Test-Path "keysys\GoldX_keysys.java")) {
-    Write-Host "$GREY(*) Downloading verification module from GitHub...$RESET"
-    try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vysr-txt/GOLDx/install/keysys/GoldX_keysys.java" -OutFile "GoldX_keysys.java" -UseBasicParsing
-    } catch {
-        Write-Host "$RED(x) ERROR: Could not download GoldX_keysys.java from GitHub! $RESET"
-        Read-Host "Press Enter to exit..."
-        exit 1
-    }
-}
-
-if (Test-Path "GoldX_keysys.class") { Remove-Item "GoldX_keysys.class" -Force }
-if (Test-Path "keysys\GoldX_keysys.class") { Remove-Item "keysys\GoldX_keysys.class" -Force }
-
-if (Test-Path "GoldX_keysys.java") {
-    Write-Host "$GREY(*) Compiling GoldX_keysys.java...$RESET"
-    javac -encoding UTF-8 -d . GoldX_keysys.java
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "$RED(x) ERROR: Failed to compile GoldX_keysys.java $RESET"
-        Read-Host "Press Enter to exit..."
-        exit 1
-    }
-} elseif (Test-Path "keysys\GoldX_keysys.java") {
-    Write-Host "$GREY(*) Compiling keysys\GoldX_keysys.java...$RESET"
-    javac -encoding UTF-8 -d . keysys\GoldX_keysys.java
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "$RED(x) ERROR: Failed to compile GoldX_keysys.java $RESET"
-        Read-Host "Press Enter to exit..."
-        exit 1
-    }
-} else {
-    Write-Host "$RED(x) ERROR: GoldX_keysys.java was not found! $RESET"
-    Read-Host "Press Enter to exit..."
-    exit 1
-}
-
-Write-Host "$GREY(*) Verifying key...$RESET"
-Write-Host ""
-
-java -cp . keysys.GoldX_keysys "$UserKey"
-$VERIFY_EXIT_CODE = $LASTEXITCODE
-
-if ($VERIFY_EXIT_CODE -ne 0) {
-    Write-Host ""
-    Write-Host "$RED(x) ERROR: Key verification failed! $RESET"
-    Write-Host "$GREY(x) Key is invalid, expired, or tampered with. $RESET"
-    Write-Host ""
-    Cleanup-KeySystem
-    Read-Host "Press Enter to exit..."
-    exit 1
-}
-
-Write-Host ""
-Write-Host "$GREEN(v) Verification successful! $RESET"
-Start-Sleep -Seconds 1
-
-Show-Header
-Write-Host "$GREY(*) Starting GOLDx installation...$RESET"
-Write-Host ""
-
-$zipPath = "$env:TEMP\GOLDx_main.zip"
-$extractPath = "$env:TEMP\GOLDx_extract"
-$githubZipUrl = "https://github.com/vysr-txt/GOLDx/archive/refs/heads/main.zip"
-
-try {
-    Write-Host "$GREY(*) Downloading main application files...$RESET"
-    Invoke-WebRequest -Uri $githubZipUrl -OutFile $zipPath -UseBasicParsing
-
-    Write-Host "$GREY(*) Extracting application files...$RESET"
-    if (Test-Path $extractPath) { Remove-Item $extractPath -Recurse -Force }
-    Expand-Archive -Path $zipPath -DestinationPath $extractPath -Force
-
-    $destination = ".\GOLDx"
-    if (-not (Test-Path $destination)) { New-Item -ItemType Directory -Path $destination | Out-Null }
-
-    if (Test-Path "$extractPath\GOLDx-main\main") {
-        Copy-Item -Path "$extractPath\GOLDx-main\main\*" -Destination $destination -Recurse -Force
-    } else {
-        Copy-Item -Path "$extractPath\GOLDx-main\*" -Destination $destination -Recurse -Force
+        } catch (Exception e) {
+            System.err.println("[GOLDx_keysys] Invalid key format or verification error: " + e.getMessage());
+            return false;
+        }
     }
 
-    Remove-Item $zipPath -Force -ErrorAction SilentlyContinue
-    Remove-Item $extractPath -Recurse -Force -ErrorAction SilentlyContinue
-} catch {
-    Write-Host "$RED(x) ERROR: Failed to download or install main files! $RESET"
-    Cleanup-KeySystem
-    Read-Host "Press Enter to exit..."
-    exit 1
+    private static String extractJsonValue(String json, String key) {
+        Pattern pattern = Pattern.compile("\"" + key + "\"\\s*:\\s*(?:\"([^\"]*)\"|([0-9]+))");
+        Matcher matcher = pattern.matcher(json);
+        if (matcher.find()) {
+            return matcher.group(1) != null ? matcher.group(1) : matcher.group(2);
+        }
+        return null;
+    }
+
+    private static boolean verifyRsaSignature(String data, String signatureBase64) throws Exception {
+        byte[] publicBytes = Base64.getDecoder().decode(PUBLIC_KEY_BASE64.replaceAll("\\s+", ""));
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+
+        Signature sig = Signature.getInstance("SHA256withRSA");
+        sig.initVerify(publicKey);
+        sig.update(data.getBytes(StandardCharsets.UTF_8));
+
+        byte[] signatureBytes = Base64.getDecoder().decode(signatureBase64);
+        return sig.verify(signatureBytes);
+    }
+
+    static void main() {
+        System.out.println("(x) There was an unexpected error.");
+    }
+
 }
-
-Cleanup-KeySystem
-
-Write-Host ""
-Write-Host "$GREEN(v) GOLDx installed successfully! $RESET"
-Write-Host ""
-Write-Host "$GREY(*) Closing Installer...$RESET"
-Start-Sleep -Seconds 2
-exit 0
