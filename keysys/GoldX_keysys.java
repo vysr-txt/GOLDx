@@ -88,8 +88,23 @@ public class GoldX_keysys {
         return sig.verify(signatureBytes);
     }
 
-    static void main() {
-        System.out.println("(x) There was an unexpected error.");
-    }
+    public static void main(String[] args) {
+        // Prüfen, ob PowerShell überhaupt einen Key übergeben hat
+        if (args.length == 0) {
+            System.err.println("[GOLDx_keysys] (x) There was an unexpected error: No key provided.");
+            System.exit(1); // Meldet PowerShell einen Fehler (Exit Code 1)
+        }
 
+        // Key an die Prüf-Logik übergeben
+        String userKey = args[0];
+        boolean isValid = verifyLicense(userKey);
+
+        // Wenn ungültig, mit Exit-Code 1 beenden, damit PowerShell stoppt
+        if (!isValid) {
+            System.exit(1);
+        }
+
+        // Wenn gültig, mit Exit-Code 0 beenden, damit PowerShell weitermacht
+        System.exit(0);
+    }
 }
