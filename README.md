@@ -44,13 +44,8 @@ A modern, lightweight, and performance-focused multitool built with Java.
 
 ## 📖 Overview
 
-**GOLDx** is a next-generation Java multitool designed around three core principles:
-
-- 🚀 **Speed** — optimized performance with minimal overhead
-- 🎯 **Simplicity** — a clean and intuitive experience
-- 🧩 **Utility** — powerful tools packed into one application
-
-Built from the ground up with a focus on reliability, efficiency, and a polished user experience.
+**GOLDx** is a stylized, terminal-based multi-tool utility script. At its core, it acts as a "Swiss Army knife" for the command line, bringing a variety of network, system, and web functionalities together into a single, centralized hub.
+It is designed for users who want quick, keyboard-driven access to everyday diagnostic and operational tools without needing to switch between different applications or browser tabs.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
